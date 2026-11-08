@@ -11,20 +11,24 @@ gsap.registerPlugin(ScrollTrigger)
 export const HALL = { w: 14, h: 5.6, depth: 38, eye: 1.72 }
 
 // Where each of the 8 works hangs. rotY: direction the picture faces.
+// Every work is the same size (2.5 m wide, 3:2) and hangs on a wall or partition,
+// alternating left / right down the hall, so all eight cards look identical.
+export const CARD = { width: 2.5, ratio: 3 / 2 }
+const L = Math.PI / 2, R = -Math.PI / 2
 export const SLOTS = [
-  { pos: [-6.93, 1.75, -9.5], rotY: Math.PI / 2, width: 2.5 }, // left wall
-  { pos: [-1.38, 1.85, -15], rotY: 0, width: 1.42, hanging: true }, // hanging pair
-  { pos: [1.38, 1.85, -15], rotY: 0, width: 1.42, hanging: true },
-  { pos: [6.93, 1.75, -18.5], rotY: -Math.PI / 2, width: 2.6 }, // right wall
-  { pos: [-3.68, 1.8, -23], rotY: Math.PI / 2, width: 2.1, niche: true }, // left partition
-  { pos: [3.68, 1.8, -27.5], rotY: -Math.PI / 2, width: 2.1, niche: true }, // right partition
-  { pos: [-6.93, 1.85, -31.5], rotY: Math.PI / 2, width: 1.6 }, // left wall, portrait
-  { pos: [6.93, 1.75, -32], rotY: -Math.PI / 2, width: 2.7 }, // right wall
-]
+  { pos: [-6.93, 1.8, -9], rotY: L }, // Villa Serein — left wall
+  { pos: [6.93, 1.8, -12.5], rotY: R }, // Casa Tierra — right wall
+  { pos: [-6.93, 1.8, -17], rotY: L }, // Casa Roca — left wall
+  { pos: [6.93, 1.8, -20.5], rotY: R }, // Villa Lumen — right wall
+  { pos: [-3.68, 1.8, -24], rotY: L }, // Villa Azur — left partition
+  { pos: [3.68, 1.8, -28.5], rotY: R }, // The Glass House — right partition
+  { pos: [-6.93, 1.8, -32.5], rotY: L }, // Residence Aurel — left wall
+  { pos: [6.93, 1.8, -33.5], rotY: R }, // Casa Albedo — right wall
+].map((s) => ({ ...s, width: CARD.width }))
 
 export const PARTITIONS = [
-  { x: -4, z: -23, len: 5 },
-  { x: 4, z: -27.5, len: 5 },
+  { x: -4, z: -24, len: 5 },
+  { x: 4, z: -28.5, len: 5 },
 ]
 
 const eye = HALL.eye
@@ -38,17 +42,18 @@ function stopFor(slot, dist, lateral = 0) {
   }
 }
 
+const STOP_DIST = 4.6 // same distance for every work → same size on screen
 export const HERO_POSE = { p: [0, 1.9, 7.2], t: [0, 1.9, 0] }
 export const STOPS = [
   { p: [0, 1.78, -1.2], t: [0, 1.65, -38], label: 'overview' },
-  { ...stopFor(SLOTS[0], 4.6), art: 0 },
-  { ...stopFor(SLOTS[1], 3.6), art: 1 },
-  { ...stopFor(SLOTS[2], 3.6), art: 2 },
-  { ...stopFor(SLOTS[3], 3.0), art: 3 },
-  { ...stopFor(SLOTS[4], 4.1), art: 4 },
-  { ...stopFor(SLOTS[5], 4.1), art: 5 },
-  { ...stopFor(SLOTS[6], 4.3), art: 6 },
-  { ...stopFor(SLOTS[7], 4.4), art: 7 },
+  { ...stopFor(SLOTS[0], STOP_DIST), art: 0 },
+  { ...stopFor(SLOTS[1], STOP_DIST), art: 1 },
+  { ...stopFor(SLOTS[2], STOP_DIST), art: 2 },
+  { ...stopFor(SLOTS[3], STOP_DIST), art: 3 },
+  { ...stopFor(SLOTS[4], STOP_DIST), art: 4 },
+  { ...stopFor(SLOTS[5], STOP_DIST), art: 5 },
+  { ...stopFor(SLOTS[6], STOP_DIST), art: 6 },
+  { ...stopFor(SLOTS[7], STOP_DIST), art: 7 },
   { p: [0, 1.75, -27.6], t: [0, 2.05, -38], label: 'end' },
 ]
 

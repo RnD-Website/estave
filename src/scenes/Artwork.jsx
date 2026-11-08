@@ -7,7 +7,7 @@ import * as THREE from 'three'
 import { GRADE } from '../lib/grade'
 import { radialTexture } from '../lib/textures'
 import { useStore, setState } from '../state/store'
-import { HALL } from '../animations/scrollAnimations'
+import { HALL, CARD } from '../animations/scrollAnimations'
 
 // Shared colour grade applied to every photograph rendered in WebGL.
 export function makeGradedMaterial(map) {
@@ -81,12 +81,12 @@ export default function Artwork({ slot, property, texture, stopIndex, index }) {
       return m
     }
     const t = texture.clone()
-    coverTexture(t, property.ratio)
+    coverTexture(t, CARD.ratio)
     return makeGradedMaterial(t)
-  }, [texture, property.ratio])
+  }, [texture])
 
   const w = slot.width
-  const h = w / property.ratio
+  const h = w / CARD.ratio // identical shape for every card
   const f = 0.022 // slim brass frame
   // card = frame + equal margin on all sides; the bottom also holds the caption block,
   // so the space BELOW the caption equals the top and side margins
