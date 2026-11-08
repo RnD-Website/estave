@@ -18,7 +18,7 @@ export const SLOTS = [
   { pos: [6.93, 1.75, -18.5], rotY: -Math.PI / 2, width: 2.6 }, // right wall
   { pos: [-3.68, 1.8, -23], rotY: Math.PI / 2, width: 2.1, niche: true }, // left partition
   { pos: [3.68, 1.8, -27.5], rotY: -Math.PI / 2, width: 2.1, niche: true }, // right partition
-  { pos: [-6.93, 1.8, -31.5], rotY: Math.PI / 2, width: 1.9 }, // left wall, portrait
+  { pos: [-6.93, 1.85, -31.5], rotY: Math.PI / 2, width: 1.6 }, // left wall, portrait
   { pos: [6.93, 1.75, -32], rotY: -Math.PI / 2, width: 2.7 }, // right wall
 ]
 
@@ -34,7 +34,7 @@ function stopFor(slot, dist, lateral = 0) {
   const nx = Math.sin(slot.rotY), nz = Math.cos(slot.rotY)
   return {
     p: [x + nx * dist + nz * lateral, eye + 0.03, z + nz * dist - nx * lateral],
-    t: [x, y - 0.02, z],
+    t: [x, y - 0.12, z], // aim at the card centre (card extends below the photo for the caption)
   }
 }
 

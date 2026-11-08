@@ -67,7 +67,8 @@ function coverTexture(tex, aspect) {
 
 const frameMat = new THREE.MeshStandardMaterial({ color: '#b48a57', roughness: 0.32, metalness: 0.75 })
 const wireMat = new THREE.MeshBasicMaterial({ color: '#7a7a7a' })
-const NICHE_MARGIN = 0.3 // metres of card around the frame, same on every side and for every work
+const NICHE_MARGIN = 0.28 // metres of card around the frame, same on every side and for every work
+const CAPTION_BLOCK = 0.215 // caption gap + name + details
 const glowMat = new THREE.MeshBasicMaterial({ color: '#fff1dc', toneMapped: false })
 
 export default function Artwork({ slot, property, texture, stopIndex, index }) {
@@ -87,8 +88,12 @@ export default function Artwork({ slot, property, texture, stopIndex, index }) {
   const w = slot.width
   const h = w / property.ratio
   const f = 0.022 // slim brass frame
-  const cw = w + f * 2 + NICHE_MARGIN * 2 // card size
-  const ch = h + f * 2 + NICHE_MARGIN * 2
+  // card = frame + equal margin on all sides; the bottom also holds the caption block,
+  // so the space BELOW the caption equals the top and side margins
+  const cw = w + f * 2 + NICHE_MARGIN * 2
+  const ch = h + f * 2 + NICHE_MARGIN * 2 + CAPTION_BLOCK
+  const cy = -CAPTION_BLOCK / 2 // card centre sits lower than the picture centre
+  const cardTop = h / 2 + f + NICHE_MARGIN
   const shadowTex = radialTexture('rgba(0,0,0,0.30)', 'art')
 
   useFrame((_, dt) => {
@@ -128,19 +133,19 @@ export default function Artwork({ slot, property, texture, stopIndex, index }) {
 
       {/* every work sits on the same cream card: identical margin on all four sides */}
       {slot.hanging ? (
-        <mesh position={[0, 0, -0.01]} material={glowMat} castShadow>
+        <mesh position={[0, cy, -0.01]} material={glowMat} castShadow>
           <boxGeometry args={[cw, ch, 0.02]} />
         </mesh>
       ) : (
-        <mesh position={[0, 0, 0.001]} material={glowMat}>
+        <mesh position={[0, cy, 0.001]} material={glowMat}>
           <planeGeometry args={[cw, ch]} />
         </mesh>
       )}
 
       {slot.hanging &&
         [-1, 1].map((sx) => (
-          <mesh key={sx} position={[sx * (cw / 2 - 0.15), (HALL.h - slot.pos[1] + ch / 2) / 2, -0.01]}>
-            <cylinderGeometry args={[0.004, 0.004, HALL.h - slot.pos[1] - ch / 2, 4]} />
+          <mesh key={sx} position={[sx * (cw / 2 - 0.15), (HALL.h - slot.pos[1] + cardTop) / 2, -0.01]}>
+            <cylinderGeometry args={[0.004, 0.004, HALL.h - slot.pos[1] - cardTop, 4]} />
             <primitive object={wireMat} attach="material" />
           </mesh>
         ))}
