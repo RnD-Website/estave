@@ -13,8 +13,8 @@ export const HALL = { w: 14, h: 5.6, depth: 38, eye: 1.72 }
 // Where each of the 8 works hangs. rotY: direction the picture faces.
 export const SLOTS = [
   { pos: [-6.93, 1.75, -9.5], rotY: Math.PI / 2, width: 2.5 }, // left wall
-  { pos: [-1.05, 1.85, -15], rotY: 0, width: 1.55, hanging: true }, // hanging pair
-  { pos: [1.05, 1.85, -15], rotY: 0, width: 1.55, hanging: true },
+  { pos: [-1.38, 1.85, -15], rotY: 0, width: 1.42, hanging: true }, // hanging pair
+  { pos: [1.38, 1.85, -15], rotY: 0, width: 1.42, hanging: true },
   { pos: [6.93, 1.75, -18.5], rotY: -Math.PI / 2, width: 2.6 }, // right wall
   { pos: [-3.68, 1.8, -23], rotY: Math.PI / 2, width: 2.1, niche: true }, // left partition
   { pos: [3.68, 1.8, -27.5], rotY: -Math.PI / 2, width: 2.1, niche: true }, // right partition
@@ -44,7 +44,7 @@ export const STOPS = [
   { ...stopFor(SLOTS[0], 4.6), art: 0 },
   { ...stopFor(SLOTS[1], 3.6), art: 1 },
   { ...stopFor(SLOTS[2], 3.6), art: 2 },
-  { ...stopFor(SLOTS[3], 3.4), art: 3 },
+  { ...stopFor(SLOTS[3], 3.0), art: 3 },
   { ...stopFor(SLOTS[4], 4.1), art: 4 },
   { ...stopFor(SLOTS[5], 4.1), art: 5 },
   { ...stopFor(SLOTS[6], 4.3), art: 6 },

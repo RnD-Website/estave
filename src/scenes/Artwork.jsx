@@ -1,6 +1,8 @@
 import { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Html } from '@react-three/drei'
+import { Text } from '@react-three/drei'
+import interSemi from '@fontsource/inter/files/inter-latin-600-normal.woff?url'
+import interMedium from '@fontsource/inter/files/inter-latin-500-normal.woff?url'
 import * as THREE from 'three'
 import { GRADE } from '../lib/grade'
 import { radialTexture } from '../lib/textures'
@@ -69,7 +71,6 @@ const NICHE_MARGIN = 0.3 // metres of card around the frame, same on every side 
 const glowMat = new THREE.MeshBasicMaterial({ color: '#fff1dc', toneMapped: false })
 
 export default function Artwork({ slot, property, texture, stopIndex, index }) {
-  const active = useStore((s) => s.activeStop === stopIndex)
   const [hovered, setHovered] = useState(false)
   const group = useRef()
   const mat = useMemo(() => {
@@ -150,17 +151,15 @@ export default function Artwork({ slot, property, texture, stopIndex, index }) {
         <meshBasicMaterial map={shadowTex} transparent depthWrite={false} opacity={slot.hanging ? 0.75 : 0.5} />
       </mesh>
 
-      <Html
-        position={[-w / 2 - f, -h / 2 - f - 0.04, 0.05]}
-        className={`art-caption${active || hovered ? ' is-on' : ''}`}
-        zIndexRange={[20, 0]}
-        pointerEvents="none"
-      >
-        <span className="art-caption__name">{property.name}</span>
-        <span className="art-caption__meta">
-          {property.location} · {property.beds} bedrooms · {property.area}
-        </span>
-      </Html>
+      {/* name + details printed on the card, always visible */}
+      <group position={[-w / 2 - f, -h / 2 - f - 0.07, slot.hanging ? 0.003 : 0.004]}>
+        <Text font={interSemi} fontSize={0.072} letterSpacing={-0.03} color="#1c1712" anchorX="left" anchorY="top">
+          {property.name}
+        </Text>
+        <Text font={interMedium} fontSize={0.046} letterSpacing={-0.01} color="#8f8172" anchorX="left" anchorY="top" position={[0, -0.095, 0]}>
+          {`${property.location}  ·  ${property.beds} bedrooms  ·  ${property.area}`}
+        </Text>
+      </group>
     </group>
   )
 }
