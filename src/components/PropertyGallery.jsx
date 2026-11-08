@@ -71,8 +71,10 @@ export default function PropertyGallery({ webgl }) {
       if (!st || !s.entered || s.menuOpen || s.sheet || !st.isActive) return
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
       const segs = STOPS.length - 1
+      const dir = e.key === 'ArrowRight' ? 1 : -1
       const cur = Math.round(shared.progress * segs)
-      const next = Math.max(0, Math.min(segs, cur + (e.key === 'ArrowRight' ? 1 : -1)))
+      let next = Math.max(0, Math.min(segs, cur + dir))
+      while (STOPS[next]?.pass && next > 0 && next < segs) next += dir // skip walk-through waypoints
       const y = st.start + ((st.end - st.start) * next) / segs
       const l = getLenis()
       l ? l.scrollTo(y, { duration: 1.2 }) : window.scrollTo({ top: y, behavior: 'smooth' })

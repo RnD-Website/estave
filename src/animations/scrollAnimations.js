@@ -11,25 +11,25 @@ gsap.registerPlugin(ScrollTrigger)
 export const HALL = { w: 14, h: 5.6, depth: 38, eye: 1.72 }
 
 // Where each of the 8 works hangs. rotY: direction the picture faces.
-// Every work is the same size (2.5 m wide, 3:2) and hangs on a wall or partition,
-// alternating left / right down the hall, so all eight cards look identical.
+// Every work is the same size (2.5 m wide, 3:2) so all eight cards look identical.
+// Four hang from the ceiling in the centre of the hall as two pairs (2 m gap between the
+// cards of a pair); each pair is shown together, and the camera walks down the centre gap.
 export const CARD = { width: 2.5, ratio: 3 / 2 }
 const L = Math.PI / 2, R = -Math.PI / 2
+const PAIR_X = 2.6
+export const PAIR_Z = [-15, -22]
 export const SLOTS = [
   { pos: [-6.93, 1.8, -9], rotY: L }, // Villa Serein — left wall
   { pos: [6.93, 1.8, -12.5], rotY: R }, // Casa Tierra — right wall
-  { pos: [-6.93, 1.8, -17], rotY: L }, // Casa Roca — left wall
-  { pos: [6.93, 1.8, -20.5], rotY: R }, // Villa Lumen — right wall
-  { pos: [-3.68, 1.8, -24], rotY: L }, // Villa Azur — left partition
-  { pos: [3.68, 1.8, -28.5], rotY: R }, // The Glass House — right partition
+  { pos: [-PAIR_X, 1.85, PAIR_Z[0]], rotY: 0, hanging: true }, // Casa Roca — pair 1 left
+  { pos: [PAIR_X, 1.85, PAIR_Z[0]], rotY: 0, hanging: true }, // Villa Lumen — pair 1 right
+  { pos: [-PAIR_X, 1.85, PAIR_Z[1]], rotY: 0, hanging: true }, // Villa Azur — pair 2 left
+  { pos: [PAIR_X, 1.85, PAIR_Z[1]], rotY: 0, hanging: true }, // The Glass House — pair 2 right
   { pos: [-6.93, 1.8, -32.5], rotY: L }, // Residence Aurel — left wall
   { pos: [6.93, 1.8, -33.5], rotY: R }, // Casa Albedo — right wall
 ].map((s) => ({ ...s, width: CARD.width }))
 
-export const PARTITIONS = [
-  { x: -4, z: -24, len: 5 },
-  { x: 4, z: -28.5, len: 5 },
-]
+export const PARTITIONS = []
 
 const eye = HALL.eye
 // camera stop for a slot: stand `dist` metres in front of the picture
@@ -44,14 +44,15 @@ function stopFor(slot, dist, lateral = 0) {
 
 const STOP_DIST = 4.6 // same distance for every work → same size on screen
 export const HERO_POSE = { p: [0, 1.9, 7.2], t: [0, 1.9, 0] }
+const PAIR_DIST = 6.2 // far enough to frame both cards of a pair side by side
+const pairStop = (z, arts) => ({ p: [0, eye + 0.03, z + PAIR_DIST], t: [0, 1.73, z], art: arts })
 export const STOPS = [
   { p: [0, 1.78, -1.2], t: [0, 1.65, -38], label: 'overview' },
   { ...stopFor(SLOTS[0], STOP_DIST), art: 0 },
   { ...stopFor(SLOTS[1], STOP_DIST), art: 1 },
-  { ...stopFor(SLOTS[2], STOP_DIST), art: 2 },
-  { ...stopFor(SLOTS[3], STOP_DIST), art: 3 },
-  { ...stopFor(SLOTS[4], STOP_DIST), art: 4 },
-  { ...stopFor(SLOTS[5], STOP_DIST), art: 5 },
+  pairStop(PAIR_Z[0], [2, 3]),
+  pairStop(PAIR_Z[1], [4, 5]),
+  { p: [0, 1.75, -23.6], t: [0, 1.7, -38], pass: true }, // walk through the gap of pair 2
   { ...stopFor(SLOTS[6], STOP_DIST), art: 6 },
   { ...stopFor(SLOTS[7], STOP_DIST), art: 7 },
   { p: [0, 1.75, -27.6], t: [0, 2.05, -38], label: 'end' },
@@ -62,8 +63,10 @@ export function sampleStops(stops, progress, dwell = 0.5) {
   const segs = stops.length - 1
   const s = Math.min(Math.max(progress, 0), 1) * segs
   const i = Math.min(Math.floor(s), segs - 1)
+  const d0 = stops[i].pass ? 0 : dwell / 2 // rest at the start of the segment
+  const d1 = stops[i + 1].pass ? 0 : dwell / 2 // rest at the end
   let f = s - i
-  f = Math.min(Math.max((f - dwell / 2) / (1 - dwell), 0), 1)
+  f = Math.min(Math.max((f - d0) / (1 - d0 - d1), 0), 1)
   const e = f * f * f * (f * (f * 6 - 15) + 10) // smootherstep
   return { i, e, s, a: stops[i], b: stops[i + 1] }
 }
