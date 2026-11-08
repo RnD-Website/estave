@@ -1,0 +1,33 @@
+ESTAVÉ — Architecture Beyond Expectations
+==========================================
+
+TO VIEW THE WEBSITE
+  Open:  site\index.html   (double-click; needs internet for the photos)
+
+TO RUN ON LOCALHOST
+  Double-click:  start-localhost.bat   (installs packages on first run, then opens http://localhost:5173)
+
+TO EDIT / DEVELOP  (needs Node.js 18+)
+  1. Open a terminal in this folder
+  2. npm install
+  3. npm run dev            -> http://localhost:5173
+  4. npm run build:single   -> rebuilds site\index.html after your changes
+
+FOLDER MAP
+  site\            Ready-to-open website (one self-contained file)
+  src\             Source code
+    components\    Page sections: Hero, Gallery, Featured, Interiors, Locations, About, Contact, Menu
+    scenes\        3D: gallery hall, procedural villa, camera, lighting
+    animations\    GSAP / ScrollTrigger: door opening, gallery tour, camera stops
+    data\          content.js — ALL text, properties, image links (edit this to change content)
+    styles\        global.css — colours, type, layout
+    lib\ state\    Helpers (textures, colour grade, scrolling, shared state)
+  public\
+    images\        Your own villa images (renamed)
+    models\        Optional villa.glb 3D model
+  docs\            Reference analysis of the MiniMaze site
+  README.md        Full documentation
+
+  index.html, package.json, package-lock.json, vite.config.js,
+  vite.single.config.js, .env.example, .gitignore
+                   Project config files — must stay in this main folder.
