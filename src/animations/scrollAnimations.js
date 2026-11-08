@@ -17,7 +17,7 @@ export const HALL = { w: 14, h: 5.6, depth: 38, eye: 1.72 }
 export const CARD = { width: 2.5, ratio: 3 / 2 }
 const L = Math.PI / 2, R = -Math.PI / 2
 const PAIR_X = 2.6
-export const PAIR_Z = [-15, -22]
+export const PAIR_Z = [-15, -23]
 export const SLOTS = [
   { pos: [-6.93, 1.8, -9], rotY: L }, // Villa Serein — left wall
   { pos: [6.93, 1.8, -12.5], rotY: R }, // Casa Tierra — right wall
@@ -52,7 +52,7 @@ export const STOPS = [
   { ...stopFor(SLOTS[1], STOP_DIST), art: 1 },
   pairStop(PAIR_Z[0], [2, 3]),
   pairStop(PAIR_Z[1], [4, 5]),
-  { p: [0, 1.75, -23.6], t: [0, 1.7, -38], pass: true }, // walk through the gap of pair 2
+  { p: [0, 1.75, -24.6], t: [0, 1.7, -38], pass: true }, // walk through the gap of pair 2
   { ...stopFor(SLOTS[6], STOP_DIST), art: 6 },
   { ...stopFor(SLOTS[7], STOP_DIST), art: 7 },
   { p: [0, 1.75, -27.6], t: [0, 2.05, -38], label: 'end' },
