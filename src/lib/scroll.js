@@ -1,5 +1,5 @@
 import { getState } from '../state/store'
-import { enterGallery, ScrollTrigger } from '../animations/scrollAnimations'
+import { enterGallery, exitGallery, ScrollTrigger } from '../animations/scrollAnimations'
 import { prefersReducedMotion } from './env'
 
 let lenis = null
@@ -26,4 +26,14 @@ export async function scrollToTarget(selector, { offset = 0 } = {}) {
 export function lockScroll(lock) {
   if (lock) lenis?.stop()
   else if (getState().entered) lenis?.start()
+}
+
+// Logo: return to the opening screen with the doors closed.
+export function goHome() {
+  if (!getState().entered) {
+    if (lenis) lenis.scrollTo(0, { duration: 1 })
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
+    return Promise.resolve()
+  }
+  return exitGallery({ lenis })
 }

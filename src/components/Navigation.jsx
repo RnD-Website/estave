@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BRAND, NAV } from '../data/content'
 import { useStore, setState } from '../state/store'
-import { scrollToTarget, lockScroll } from '../lib/scroll'
+import { scrollToTarget, lockScroll, goHome } from '../lib/scroll'
 import { RollText, EASE } from './common'
 
 export default function Navigation() {
@@ -41,7 +41,17 @@ export default function Navigation() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, ease: EASE, delay: 0.2 }}
       >
-        <a href="#gallery" className="logo" onClick={go('#gallery')} aria-label="ESTAVÉ — back to the gallery">
+        <a
+          href="#gallery"
+          className="logo"
+          onClick={(e) => {
+            e.preventDefault()
+            const wasOpen = open
+            setState({ menuOpen: false })
+            setTimeout(goHome, wasOpen ? 450 : 0)
+          }}
+          aria-label="ESTAVÉ — back to the start"
+        >
           <span className="logo__rule" aria-hidden="true" />
           {BRAND.name}
         </a>

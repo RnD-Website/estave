@@ -98,6 +98,37 @@ export function enterGallery({ lenis, instant = false } = {}) {
   })
 }
 
+/* Back to the opening screen — scroll to the top, pull the camera back, close the doors. */
+export function exitGallery({ lenis } = {}) {
+  const reduce = prefersReducedMotion()
+  return new Promise((resolve) => {
+    const closeDoors = () => {
+      setState({ entered: false, activeStop: -1, sheet: null })
+      lenis?.stop()
+      document.documentElement.classList.add('is-locked')
+      if (reduce) {
+        shared.door = 0
+        shared.intro = 0
+        resolve()
+        return
+      }
+      gsap
+        .timeline({ onComplete: resolve })
+        .to(shared, { intro: 0, duration: 1.8, ease: 'power2.inOut' }, 0)
+        .to(shared, { door: 0, duration: 1.6, ease: 'power3.inOut' }, 0.5)
+    }
+    if (window.scrollY < 2) return closeDoors()
+    if (lenis && !reduce) {
+      // the longer the way back, the longer (but capped) the glide
+      const duration = Math.min(2.2, 0.8 + window.scrollY / 6000)
+      lenis.scrollTo(0, { duration, easing: (t) => 1 - Math.pow(1 - t, 3), force: true, onComplete: closeDoors })
+    } else {
+      window.scrollTo(0, 0)
+      requestAnimationFrame(closeDoors)
+    }
+  })
+}
+
 /* Pinned gallery tour: progress of the pinned section drives the camera. */
 export function createGalleryTour(section, stopsCount) {
   const segs = stopsCount - 1
